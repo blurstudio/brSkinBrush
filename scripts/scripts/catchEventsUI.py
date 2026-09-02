@@ -54,26 +54,26 @@ def callMarkingMenu():
         ("smooth", "W", "smooth", 4),
         ("locks Verts", "SE", "locks", 6),
     ]
-    for ind, (txt, posi, btn, cmdInd) in enumerate(lstCommands):
+    for ind, (txt, posi, _btn, cmdInd) in enumerate(lstCommands):
         kwArgs["radialPosition"] = posi
         kwArgs["label"] = txt
         kwArgs[
             "command"
-        ] = "brSkinBrushContext -edit -commandIndex {} `currentCtx`;".format(cmdInd)
-        cmds.menuItem("menuEditorMenuItem{0}".format(ind + 1), **kwArgs)
+        ] = f"brSkinBrushContext -edit -commandIndex {cmdInd} `currentCtx`;"
+        cmds.menuItem(f"menuEditorMenuItem{ind + 1}", **kwArgs)
 
     kwArgs.pop("radialPosition", None)
     kwArgs["label"] = "solo color"
     kwArgs["subMenu"] = True
 
-    cmds.menuItem("menuEditorMenuItem{0}".format(len(lstCommands) + 1), **kwArgs)
+    cmds.menuItem(f"menuEditorMenuItem{len(lstCommands) + 1}", **kwArgs)
     kwArgs["subMenu"] = False
     for ind, colType in enumerate(["white", "lava", "influence"]):
         kwArgs["label"] = colType
         kwArgs[
             "command"
-        ] = "brSkinBrushContext -edit -soloColorType {} `currentCtx`;".format(ind)
-        cmds.menuItem("menuEditorMenuItemCol{0}".format(ind + 1), **kwArgs)
+        ] = f"brSkinBrushContext -edit -soloColorType {ind} `currentCtx`;"
+        cmds.menuItem(f"menuEditorMenuItemCol{ind + 1}", **kwArgs)
 
     mel.eval("setParent -menu ..;")
     mel.eval("setParent -menu ..;")
@@ -90,11 +90,11 @@ def rootWindow():
         window = inst.activeWindow()
         if isinstance(window, QSplashScreen):
             return None
-        if window == None:
+        if window is None:
             windows = []
             dialogs = []
             for w in QApplication.instance().topLevelWidgets():
-                if w.parent() == None:
+                if w.parent() is None:
                     if isinstance(w, QMainWindow):
                         windows.append(w)
                     elif isinstance(w, QDialog):
@@ -123,7 +123,8 @@ class CatchEventsWidget(QtWidgets.QWidget):
     filterInstalled = False
     displayLabel = None
     EventFilterWidgetReceiver = None
-    lstButtons = [
+    restorePanels = []
+    lstButtons = (
         "brSkinBrushAddRb",
         "brSkinBrushRemoveRb",
         "brSkinBrushAddPercentRb",
@@ -132,10 +133,10 @@ class CatchEventsWidget(QtWidgets.QWidget):
         "brSkinBrushSharpenRb",
         "brSkinBrushLockVerticesRb",
         "brSkinBrushUnLockVerticesRb",
-    ]
+    )
 
     def __init__(self):
-        super(CatchEventsWidget, self).__init__(rootWindow())
+        super().__init__(rootWindow())
         self.setMask(QtGui.QRegion(0, 0, 1, 1))
 
         self.OPressed = False
@@ -149,7 +150,6 @@ class CatchEventsWidget(QtWidgets.QWidget):
         self.prevButton = self.lstButtons[0]
 
     # ---------- GAMMA --------------------------------------
-    restorePanels = []
 
     def setPanelsDisplayOn(self):
         self.restorePanels = []
@@ -203,14 +203,14 @@ class CatchEventsWidget(QtWidgets.QWidget):
         QApplication.instance().removeEventFilter(self)
 
     def eventFilter(self, obj, event):
-        if event.type() == QtCore.QEvent.MouseMove:
+        if event.type() == QtCore.QEvent.Type.MouseMove:
             event.ignore()
-            return super(CatchEventsWidget, self).eventFilter(obj, event)
+            return super().eventFilter(obj, event)
 
-        if event.type() == QtCore.QEvent.KeyRelease:
+        if event.type() == QtCore.QEvent.Type.KeyRelease:
             if self.CtrlOrShiftPressed and event.key() in [
-                QtCore.Qt.Key_Shift,
-                QtCore.Qt.Key_Control,
+                QtCore.Qt.Key.Key_Shift,
+                QtCore.Qt.Key.Key_Control,
             ]:
                 if self.verbose:
                     print("custom SHIFT or CONTROL released")
@@ -225,23 +225,28 @@ class CatchEventsWidget(QtWidgets.QWidget):
                             edit=True,
                             value=self.prevStrengthValue,
                         )
-                    except:
+                    except Exception:
                         pass
-            elif event.key() == QtCore.Qt.Key_U:
+            elif event.key() == QtCore.Qt.Key.Key_U:
                 if obj is self.EventFilterWidgetReceiver and self.OPressed:
                     self.OPressed = False
                     event.ignore()
                     return True
-                return super(CatchEventsWidget, self).eventFilter(obj, event)
-            return super(CatchEventsWidget, self).eventFilter(obj, event)
+                return super().eventFilter(obj, event)
+            return super().eventFilter(obj, event)
 
         if (
             event.type()
-            in [QtCore.QEvent.MouseButtonPress, QtCore.QEvent.MouseButtonRelease]
-            and event.modifiers() != QtCore.Qt.AltModifier
+            in [
+                QtCore.QEvent.Type.MouseButtonPress,
+                QtCore.QEvent.Type.MouseButtonRelease,
+            ]
+            and event.modifiers() != QtCore.Qt.KeyboardModifier.AltModifier
         ):
-            if event.modifiers() == QtCore.Qt.NoModifier:  # regular click
-                if event.type() == QtCore.QEvent.MouseButtonPress:  # click
+            if (
+                event.modifiers() == QtCore.Qt.KeyboardModifier.NoModifier
+            ):  # regular click
+                if event.type() == QtCore.QEvent.Type.MouseButtonPress:  # click
                     if self.OPressed:
                         if not self.markingMenuShown:
                             callMarkingMenu()
@@ -254,14 +259,16 @@ class CatchEventsWidget(QtWidgets.QWidget):
                         self.OPressed = False
                         self.closingNextPressMarkingMenu = False
 
-                elif event.type() == QtCore.QEvent.MouseButtonRelease:  # click release
-                    if self.markingMenuShown:
-                        self.closingNextPressMarkingMenu = True
-                return super(CatchEventsWidget, self).eventFilter(obj, event)
-            return super(CatchEventsWidget, self).eventFilter(obj, event)
+                elif (
+                    event.type() == QtCore.QEvent.Type.MouseButtonRelease
+                    and self.markingMenuShown
+                ):
+                    self.closingNextPressMarkingMenu = True
+                return super().eventFilter(obj, event)
+            return super().eventFilter(obj, event)
 
-        if event.type() == QtCore.QEvent.KeyPress:
-            if event.key() == QtCore.Qt.Key_P:  # print info of the click press
+        if event.type() == QtCore.QEvent.Type.KeyPress:
+            if event.key() == QtCore.Qt.Key.Key_P:  # print info of the click press
                 active_view = OpenMayaUI.M3dView.active3dView()
                 sw = active_view.widget()
                 res = QtCompat.wrapInstance(PTR_TYPE(sw), QtWidgets.QWidget)
@@ -301,9 +308,9 @@ class CatchEventsWidget(QtWidgets.QWidget):
                     print("it is a model_panel Parent")
                 else:
                     print(obj)
-                return super(CatchEventsWidget, self).eventFilter(obj, event)
+                return super().eventFilter(obj, event)
 
-            if event.key() == QtCore.Qt.Key_U:
+            if event.key() == QtCore.Qt.Key.Key_U:
                 if self.OPressed:
                     event.ignore()
                     return True
@@ -311,15 +318,15 @@ class CatchEventsWidget(QtWidgets.QWidget):
                     self.OPressed = True
                     return True
                 else:
-                    return super(CatchEventsWidget, self).eventFilter(obj, event)
+                    return super().eventFilter(obj, event)
 
-            elif event.key() == QtCore.Qt.Key_Escape:
+            elif event.key() == QtCore.Qt.Key.Key_Escape:
                 brSkinBrush_pythonFunctions.escapePressed()
                 event.ignore()
                 mel.eval("setToolTo $gMove;")
                 return True
 
-            elif event.key() == QtCore.Qt.Key_D:
+            elif event.key() == QtCore.Qt.Key.Key_D:
                 listModelPanels = [
                     el
                     for el in cmds.getPanel(vis=True)
@@ -338,7 +345,7 @@ class CatchEventsWidget(QtWidgets.QWidget):
                     print("it is a model_panel")
                     event.ignore()
 
-                    if event.modifiers() == QtCore.Qt.AltModifier:
+                    if event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier:
                         mel.eval(
                             "brSkinBrushContext -edit -pickMaxInfluence 1 `currentCtx`;"
                         )
@@ -350,8 +357,8 @@ class CatchEventsWidget(QtWidgets.QWidget):
                     event.ignore()
                     return True
 
-            elif event.key() == QtCore.Qt.Key_Control:
-                if QApplication.mouseButtons() == QtCore.Qt.NoButton:
+            elif event.key() == QtCore.Qt.Key.Key_Control:
+                if QApplication.mouseButtons() == QtCore.Qt.MouseButton.NoButton:
                     if self.verbose:
                         print("custom CONTROL pressed")
                     event.ignore()
@@ -378,12 +385,12 @@ class CatchEventsWidget(QtWidgets.QWidget):
                             cmds.floatSliderGrp(
                                 "brSkinBrushStrength", edit=True, value=smoothValue
                             )
-                        except:
+                        except Exception:
                             pass
                     return True
 
-            elif event.key() == QtCore.Qt.Key_Shift and not self.CtrlOrShiftPressed:
-                if QApplication.mouseButtons() == QtCore.Qt.NoButton:
+            elif event.key() == QtCore.Qt.Key.Key_Shift and not self.CtrlOrShiftPressed:
+                if QApplication.mouseButtons() == QtCore.Qt.MouseButton.NoButton:
                     if self.verbose:
                         print("custom SHIFT pressed")
                     event.ignore()
@@ -407,12 +414,12 @@ class CatchEventsWidget(QtWidgets.QWidget):
                             cmds.radioButton(
                                 "brSkinBrushUnLockVerticesRb", edit=True, select=True
                             )
-                    except:
+                    except Exception:
                         pass
                     return True
 
-            elif event.modifiers() == QtCore.Qt.AltModifier:
-                if event.key() == QtCore.Qt.Key_X:
+            elif event.modifiers() == QtCore.Qt.KeyboardModifier.AltModifier:
+                if event.key() == QtCore.Qt.Key.Key_X:
                     listModelPanels = [
                         el
                         for el in cmds.getPanel(vis=True)
@@ -426,8 +433,7 @@ class CatchEventsWidget(QtWidgets.QWidget):
                     event.ignore()
                     return True
 
-                if event.key() == QtCore.Qt.Key_W:
-
+                if event.key() == QtCore.Qt.Key.Key_W:
                     if cmds.objExists("SkinningWireframe"):
                         vis = cmds.getAttr("SkinningWireframe.v")
                         cmds.setAttr("SkinningWireframe.v", not vis)
@@ -435,22 +441,20 @@ class CatchEventsWidget(QtWidgets.QWidget):
                     event.ignore()
                     return True
 
-                if event.key() == QtCore.Qt.Key_S:
+                if event.key() == QtCore.Qt.Key.Key_S:
                     brSkinBrush_pythonFunctions.toggleSoloMode()
                     event.ignore()
                     return True
 
-                if event.key() == QtCore.Qt.Key_M:
+                if event.key() == QtCore.Qt.Key.Key_M:
                     print("mirror active")
                     event.ignore()
                     return True
 
-            return super(CatchEventsWidget, self).eventFilter(obj, event)
-        return super(CatchEventsWidget, self).eventFilter(obj, event)
+            return super().eventFilter(obj, event)
+        return super().eventFilter(obj, event)
 
     def closeEvent(self, e):
-        """
-        Make sure the eventFilter is removed
-        """
+        """Make sure the eventFilter is removed"""
         self.fermer()
-        return super(CatchEventsWidget, self).closeEvent(e)
+        return super().closeEvent(e)
