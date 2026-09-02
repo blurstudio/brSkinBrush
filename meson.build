@@ -34,3 +34,11 @@ outlib = shared_library(
   name_prefix : '',
   name_suffix : maya_name_suffix,
 )
+
+script_install_dir = meson.global_source_root()
+install_subdir(
+  'scripts/scripts',
+  install_dir: meson.global_source_root(),
+  install_tag: 'scripts',
+  exclude_files: ['Qt.py'],
+)
