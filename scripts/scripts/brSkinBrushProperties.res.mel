@@ -107,7 +107,7 @@ displayString -replace
 
 displayString -replace
               -value ("set the values after  " +
-                      "the mouse is released")                      
+                      "the mouse is released")
               m_brSkinBrushProperties.kPostSetting;
 
 displayString -replace

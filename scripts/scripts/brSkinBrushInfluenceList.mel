@@ -86,7 +86,7 @@ global proc brSkinBrushClearSearch()
 
 global proc brSkinBrushAddJnt()
 {
-    python("import brSkinBrush_pythonFunctions\nbrSkinBrush_pythonFunctions.addInfluences()");    
+    python("import brSkinBrush_pythonFunctions\nbrSkinBrush_pythonFunctions.addInfluences()");
 }
 
 
@@ -333,7 +333,7 @@ global proc brSkinBrushListInfluences( string $skin, int $newMesh )
             treeView -edit -showItem $currentDeformer brSkinBrushJointTree;
             treeView -edit -selectItem $currentDeformer 1 brSkinBrushJointTree;
         }
-    }    
+    }
 }
 
 
@@ -392,7 +392,7 @@ global proc brSkinBrushAddInfluenceToList( string $item, string $parent )
     if (`attributeQuery -node $item -exists "wireColorRGB"`)
     {
         float  $theColor[] = `getAttr ($item+".wireColorRGB")` ;
-        treeView -edit -buttonTransparencyColor 
+        treeView -edit -buttonTransparencyColor
                  $item 2 $theColor[0] $theColor[1] $theColor[2]
                  brSkinBrushJointTree;
     }
@@ -469,11 +469,11 @@ global proc brSkinBrushPickColorItem( string $button, int $state )
             float $values[];
             $values = `colorEditor -query -rgb`;
             print ("treeView -edit -buttonTransparencyColor \"" + $item + "\" 2 " + $values[0] + " " + $values[1] + " " + $values[2] + " brSkinBrushJointTree;\n");
-            treeView -edit -buttonTransparencyColor 
+            treeView -edit -buttonTransparencyColor
                      $item 2 $values[0] $values[1] $values[2]
                      brSkinBrushJointTree;
 
-            setAttr ($item+".wireColorRGB") $values[0] $values[1] $values[2] ;            
+            setAttr ($item+".wireColorRGB") $values[0] $values[1] $values[2] ;
         } else {
             print ("Editor was dismissed\n");
         }
@@ -593,12 +593,12 @@ global proc brSkinBrushInfluenceList()
                                           -height 15
                                           -command
                                           brSkinBrushClearSearch`;
-            checkBoxGrp -label "Hide locks" 
-                        -columnWidth2 62 10 
-                        -changeCommand brSkinBrushSearchJointString 
+            checkBoxGrp -label "Hide locks"
+                        -columnWidth2 62 10
+                        -changeCommand brSkinBrushSearchJointString
                         brSkinBrushHideLockCheck;
 
-            button -label "Add joint" -command brSkinBrushAddJnt -height 15  -width 150 brSkinBrushAddJntButton;                
+            button -label "Add joint" -command brSkinBrushAddJnt -height 15  -width 150 brSkinBrushAddJntButton;
             // ---------------------------------------------------------
             // influence list
             // ---------------------------------------------------------

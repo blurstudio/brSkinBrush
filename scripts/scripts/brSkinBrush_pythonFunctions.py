@@ -655,7 +655,8 @@ def fixOptionVarContext(**inputKargsToChange):
         kwargs = OrderedDict()
         if cmds.optionVar(exists="brSkinBrushContext1"):
             cmd = cmds.optionVar(query="brSkinBrushContext1")
-            # remove command name and command object at the end : brSkinBrushContext anmd brSkinBrushContext1;
+            # remove command name and command object at the end :
+            # brSkinBrushContext anmd brSkinBrushContext1;
             splitofspaces = cmd.split(" ")
             cmd2 = " ".join(splitofspaces[1:-1])
             spl = cmd2.split("-")
@@ -808,9 +809,8 @@ def pickedInfluence(jointName):
             cmds.treeView("brSkinBrushJointTree", edit=True, clearSelection=True)
             cmds.treeView("brSkinBrushJointTree", edit=True, showItem=jointName)
             mel.eval(
-                'global string $gSkinBrushInfluenceSelection[];    $gSkinBrushInfluenceSelection = { "'
-                + jointName
-                + '" };'
+                "global string $gSkinBrushInfluenceSelection[];"
+                + '$gSkinBrushInfluenceSelection = {{"{jointName}"}};'
             )
 
         callPaintEditorFunction("updateCurrentInfluence", jointName)

@@ -75,7 +75,7 @@ proc addAnnotations()
     symbolCheckBox -edit
                    -annotation (uiRes("m_brSkinBrushProperties.kCurveNarrow"))
                    brSkinBrushNarrowButton;
-    
+
     checkBoxGrp -edit
                 -annotation (uiRes("m_brSkinBrushProperties.kDrawBrush"))
                 brSkinBrushDrawBrushCheck;
@@ -156,7 +156,7 @@ proc deleteAnnotations()
     checkBoxGrp -edit -annotation "" brSkinBrushCoverageCheck;
     button -edit -annotation "" brSkinBrushPickInfluenceButton;
     button -edit -annotation "" brSkinBrushPickMaxInfluenceButton;
-    
+
     checkBoxGrp -edit -annotation "" brSkinBrushDisplayTipsCheck;
     checkBoxGrp -edit -annotation "" brSkinBrushPostSettingCheck;
 }
@@ -183,12 +183,12 @@ global proc brSkinBrushSetRefresh (){
     global string $gSkinBrushMesh;
     if ($gSkinBrushMesh !="NOPEofNOPE")
         $gSkinBrushMesh ="NOPEofNOPE";
-    else 
+    else
         $gSkinBrushMesh ="NOPEofNOPE2";
-            
+
     brSkinBrushGetSelection ();
     brSkinBrushContext -edit -refresh 1 `currentCtx`;
-    
+
     // list of joints  refresh
     global string $gSkinBrushSkinCluster;
     brSkinBrushListInfluences($gSkinBrushSkinCluster, 1); // not newMesh
@@ -201,11 +201,11 @@ global proc brSkinBrushReflectionSetMode(string $mode)
     global string $brSkinBrushReflectionPrevMode;
     if ($mode != "none") $brSkinBrushReflectionPrevMode = $mode;
 
-    if ($mode == "none") {        
+    if ($mode == "none") {
         textField -e -text "Off" brSkinBrushReflectionOptionsText;
         brSkinBrushContext -edit -mirrorPaint 0 `currentCtx`;
     } else if ($mode == "origx") {
-        textField -e -text "OrigShape X" brSkinBrushReflectionOptionsText;        
+        textField -e -text "OrigShape X" brSkinBrushReflectionOptionsText;
         brSkinBrushContext -edit -mirrorPaint 1 `currentCtx`;
     } else if ($mode == "origy") {
         textField -e -text "OrigShape Y" brSkinBrushReflectionOptionsText;
@@ -214,11 +214,11 @@ global proc brSkinBrushReflectionSetMode(string $mode)
         textField -e -text "OrigShape Z" brSkinBrushReflectionOptionsText;
         brSkinBrushContext -edit -mirrorPaint 3 `currentCtx`;
     } else if ($mode == "objectx") {
-        textField -e -text "Object X" brSkinBrushReflectionOptionsText;        
+        textField -e -text "Object X" brSkinBrushReflectionOptionsText;
         brSkinBrushContext -edit -mirrorPaint 4 `currentCtx`;
     } else if ($mode == "objecty") {
         textField -e -text "Object Y" brSkinBrushReflectionOptionsText;
-        brSkinBrushContext -edit -mirrorPaint 5 `currentCtx`;    
+        brSkinBrushContext -edit -mirrorPaint 5 `currentCtx`;
     } else if ($mode == "objectz") {
         textField -e -text "Object Z" brSkinBrushReflectionOptionsText;
         brSkinBrushContext -edit -mirrorPaint 6 `currentCtx`;
@@ -235,7 +235,7 @@ global proc brSkinBrushReflectionSetMode(string $mode)
         textField -e -text "Topology" brSkinBrushReflectionOptionsText;
         brSkinBrushContext -edit -mirrorPaint 10 `currentCtx`;
     }
-    
+
 }
 
 global proc brSkinBrushReflectionToggle()
@@ -285,7 +285,7 @@ global proc brSkinBrushSetCallbacks( string $parent )
 
     button -edit
            -command "global string $gSkinBrushMesh;setAttr -type \"Int32Array\"  ($gSkinBrushMesh+\".lockedVertices\") 0; brSkinBrushContext -edit -refresh 1 `currentCtx`;"
-           brSkinBrushClearLocksButton;           
+           brSkinBrushClearLocksButton;
 
     button -edit
            -command brSkinBrushSetRefresh
@@ -363,7 +363,7 @@ global proc brSkinBrushSetCallbacks( string $parent )
     radioButton -edit -onCommand "brSkinBrushContext -edit -commandIndex 2 `currentCtx`;" brSkinBrushAddPercentRb;
     radioButton -edit -onCommand "brSkinBrushContext -edit -commandIndex 3 `currentCtx`;" brSkinBrushAbsoluteRb;
 
-    radioButton -edit -onCommand "brSkinBrushContext -edit -commandIndex 4 `currentCtx`; floatSliderGrp -edit -value `brSkinBrushContext -query -smoothStrength \"brSkinBrushContext1\"` brSkinBrushStrength ;" brSkinBrushSmoothRb; //smooth    
+    radioButton -edit -onCommand "brSkinBrushContext -edit -commandIndex 4 `currentCtx`; floatSliderGrp -edit -value `brSkinBrushContext -query -smoothStrength \"brSkinBrushContext1\"` brSkinBrushStrength ;" brSkinBrushSmoothRb; //smooth
     radioButton -edit -offCommand "floatSliderGrp -edit -value `brSkinBrushContext -query -strength \"brSkinBrushContext1\"` brSkinBrushStrength ;" brSkinBrushSmoothRb; //smooth
 
     radioButton -edit -onCommand "brSkinBrushContext -edit -commandIndex 5 `currentCtx`;" brSkinBrushSharpenRb;
@@ -445,9 +445,9 @@ global proc brSkinBrushProperties()
                             -columnWidth 4 100
                             -columnWidth 5 5;
                 columnLayout; setParent .. ;
-                button -label "Flood -- " brSkinBrushFloodButton;                
+                button -label "Flood -- " brSkinBrushFloodButton;
                 columnLayout; setParent .. ;
-                button -label "Refresh" brSkinBrushRefreshButton;                
+                button -label "Refresh" brSkinBrushRefreshButton;
                 columnLayout; setParent ..;
             setParent .. ;
 
@@ -465,13 +465,13 @@ global proc brSkinBrushProperties()
                 rowColumnLayout -numberOfColumns 5
                                 -columnWidth 1 2
                                 -columnWidth 2 100
-                                -columnWidth 3 100    
+                                -columnWidth 3 100
                                 -columnWidth 4 100
                                 -columnWidth 5 2;
 
-                radioCollection brSkinBrushCommandRbCollection;                
-                
-                columnLayout; setParent .. ;            
+                radioCollection brSkinBrushCommandRbCollection;
+
+                columnLayout; setParent .. ;
                 radioButton -label "Add" brSkinBrushAddRb;
                 radioButton -label "Remove" brSkinBrushRemoveRb;
                 radioButton -label "AddPercent" brSkinBrushAddPercentRb;
@@ -482,7 +482,7 @@ global proc brSkinBrushProperties()
                 radioButton -label "Smooth" brSkinBrushSmoothRb;
                 radioButton -label "Sharpen" brSkinBrushSharpenRb;
                 columnLayout; setParent .. ;
-                
+
                 columnLayout; setParent .. ;
                 radioButton -label "LockVertices" brSkinBrushLockVerticesRb;
                 radioButton -label "UnLockVertices" brSkinBrushUnLockVerticesRb;
@@ -495,44 +495,44 @@ global proc brSkinBrushProperties()
 
                 // Symmetry mode ---------------------------------------------
                 rowLayout -nc 4 -cw4 132 20 157 48;
-                    text -align right 
+                    text -align right
                         -l "Symmetry:"
                         -ann "Activate Symmetry"
                         brSkinBrushReflectionOptionsLabel;
-    
+
                     string $symButton = `iconTextButton
                         -w 17 -h 26
                         -image ("popupMenuIcon.png")
                         brSkinBrushReflectionOptionsButton`;
-    
+
                     string $symMenu = `popupMenu -b 1 -p $symButton`;
                     menu -e -pmc ("brSkinBrushReflectionBuildMenu " + $symMenu) $symMenu;
                     string $symToggle = `popupMenu -b 2 -p $symButton`;
                     menu -e -pmc "brSkinBrushReflectionToggle" $symToggle;
-    
-                    textField 
+
+                    textField
                         -ed false
                         -width 157
                         -height 25
                         brSkinBrushReflectionOptionsText;
-    
+
                     button -label "Reset" -command "brSkinBrushResetReflectionOptions" -width 48;
                 setParent ..;
 
                 floatSliderGrp -field true -label "Tolerance"
-                    -annotation "Tolerance for the mirror" 
+                    -annotation "Tolerance for the mirror"
                     -precision 4
-                    -min 0.0001 -max 0.2 
-                    -fieldMaxValue 1.0 
+                    -min 0.0001 -max 0.2
+                    -fieldMaxValue 1.0
                     brSkinBrushReflectionOptionsTol_FS;
 
                 separator -style "none";
 
-                radioButtonGrp -numberOfRadioButtons 2 
-                    -columnWidth3 90 80 80 
+                radioButtonGrp -numberOfRadioButtons 2
+                    -columnWidth3 90 80 80
                     -label "Color mode :  " -labelArray2 "Multi Color" "Solo Color"  brSkinBrushColorModeRbg ;
-                radioButtonGrp -numberOfRadioButtons 3 
-                    -columnWidth4 90 60 50 50 
+                radioButtonGrp -numberOfRadioButtons 3
+                    -columnWidth4 90 60 50 50
                     -label "Solo Color :  " -labelArray3 "White" "Lava" "Influence" brSkinBrushSoloColorTypeRbg;
 
                 checkBoxGrp -label "Use Color Set While Painting" brSkinBrushUseColorSetsWhilePainting;
@@ -557,7 +557,7 @@ global proc brSkinBrushProperties()
                 setParent .. ;
 
                 checkBoxGrp -label "180 Coverage" brSkinBrushCoverageCheck;
-                checkBoxGrp -label "post setting" brSkinBrushPostSettingCheck;                
+                checkBoxGrp -label "post setting" brSkinBrushPostSettingCheck;
 
             setParent ..;
 
@@ -668,8 +668,8 @@ global proc brSkinBrushProperties()
 
     brSkinBrushToggleAnnotations;
     //for the size
-    workspaceControl -e -collapse 1 ToolSettings;    
-    workspaceControl -e -minimumWidth 320 -initialWidth 320 -resizeWidth 320 -widthProperty free ToolSettings;    
+    workspaceControl -e -collapse 1 ToolSettings;
+    workspaceControl -e -minimumWidth 320 -initialWidth 320 -resizeWidth 320 -widthProperty free ToolSettings;
     workspaceControl -e -raise -collapse 0  ToolSettings;
 }
 

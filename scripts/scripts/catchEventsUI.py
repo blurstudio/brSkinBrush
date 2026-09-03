@@ -44,7 +44,8 @@ def callMarkingMenu():
         "sourceType": "mel",
         "longDivider": True,
     }
-    # 0 Add - 1 Remove - 2 AddPercent - 3 Absolute - 4 Smooth - 5 Sharpen - 6 LockVertices - 7 UnLockVertices
+    # 0 Add - 1 Remove - 2 AddPercent - 3 Absolute
+    # 4 Smooth - 5 Sharpen - 6 LockVertices - 7 UnLockVertices
 
     lstCommands = [
         ("add", "N", "add", 0),

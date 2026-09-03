@@ -67,7 +67,7 @@ global proc brSkinBrushOptionValues( string $toolName )
     $intVal = eval("brSkinBrushContext -query -commandIndex " + $toolName);
     string $collectionItemArray [] = `radioCollection -q -collectionItemArray brSkinBrushCommandRbCollection`;
     radioCollection -edit -select $collectionItemArray[$intVal] brSkinBrushCommandRbCollection;
-    
+
     if ($intVal == 4 ){// if smooth --
         $floatVal = eval("brSkinBrushContext -query -smoothStrength " + $toolName);
         floatSliderGrp -edit -value $floatVal brSkinBrushStrength;
@@ -81,7 +81,7 @@ global proc brSkinBrushOptionValues( string $toolName )
 
     $intVal = eval("brSkinBrushContext -query -postSetting " + $toolName);
     checkBoxGrp -edit -value1 $intVal brSkinBrushPostSettingCheck;
-    
+
     $intVal = eval("brSkinBrushContext -query -coverage " + $toolName);
     checkBoxGrp -edit -value1 $intVal brSkinBrushCoverageCheck;
 
